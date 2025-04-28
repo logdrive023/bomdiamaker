@@ -20,6 +20,7 @@ type Template = {
   id: number
   backgroundUrl: string
   textElements: TextElement[]
+  placeholderDescription?: string // Adicionado para suportar descrições de placeholder
 }
 
 // Define the editor state type for localStorage
@@ -64,6 +65,30 @@ const createDefaultTextElement = (): TextElement => ({
 
 // Local storage key
 const EDITOR_STATE_KEY = "bom_dia_maker_editor_state"
+
+// Função para verificar se uma URL de imagem existe ou gerar um placeholder
+const getValidImageUrl = (url: string, description?: string) => {
+  // Se for uma URL relativa começando com /templates/ e não for um dos templates que sabemos que existem
+  if (url.startsWith("/templates/")) {
+    // Lista de templates que sabemos que existem (baseado nas imagens que vimos carregadas)
+    const existingTemplates = [
+      "/templates/bird-morning-song.png",
+      "/templates/coffee-morning-joy.png",
+      "/templates/sunrise-blessing.png",
+      "/templates/beach-morning.png",
+      "/templates/bible-morning.png",
+    ]
+
+    if (!existingTemplates.includes(url)) {
+      // Gerar um placeholder com a descrição ou o nome do arquivo
+      const templateName = url.split("/").pop()?.split(".")[0] || ""
+      const placeholderDesc = description || templateName.replace(/-/g, " ")
+      return `/placeholder.svg?height=600&width=800&query=${encodeURIComponent(placeholderDesc)}`
+    }
+  }
+
+  return url
+}
 
 // Sample templates data
 const templates: Template[] = [
@@ -120,6 +145,7 @@ const templates: Template[] = [
         position: { x: 400, y: 400 },
       },
     ],
+    placeholderDescription: "Família feliz reunida no café da manhã com luz do sol",
   },
   {
     id: 4,
@@ -174,6 +200,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Montanhas majestosas ao amanhecer com céu colorido",
   },
   {
     id: 7,
@@ -189,6 +216,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Mãos em oração com luz divina ao amanhecer",
   },
   {
     id: 8,
@@ -213,6 +241,7 @@ const templates: Template[] = [
         position: { x: 400, y: 350 },
       },
     ],
+    placeholderDescription: "Calendário mostrando segunda-feira com mensagem motivacional",
   },
   {
     id: 9,
@@ -243,6 +272,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Campo de flores coloridas ao nascer do sol",
   },
   {
     id: 11,
@@ -288,6 +318,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Jardim florido iluminado pelos primeiros raios de sol",
   },
   {
     id: 14,
@@ -303,10 +334,11 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Campo de girassóis voltados para o sol nascente",
   },
   {
     id: 15,
-    backgroundUrl: "/templates/bible-morning.png",
+    backgroundUrl: "/templates/bible-morning.jpeg",
     textElements: [
       {
         id: "template_15_text_1",
@@ -318,6 +350,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Bíblia aberta com luz divina e versículo inspirador",
   },
   {
     id: 16,
@@ -333,6 +366,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Borboleta colorida pousada em uma flor ao amanhecer",
   },
   {
     id: 17,
@@ -348,6 +382,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Arco-íris vibrante após chuva com céu clareando",
   },
   {
     id: 18,
@@ -363,6 +398,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Xícara de chá fumegante com ervas e ambiente tranquilo",
   },
   {
     id: 19,
@@ -378,6 +414,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Mãos em gesto de gratidão com raios de sol",
   },
   {
     id: 20,
@@ -393,6 +430,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Janela aberta com cortinas balançando e sol entrando",
   },
   {
     id: 21,
@@ -408,6 +446,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Mesa de café da manhã com pães, frutas e café",
   },
   {
     id: 22,
@@ -423,6 +462,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Gatinho fofo se espreguiçando ao acordar",
   },
   {
     id: 23,
@@ -438,6 +478,7 @@ const templates: Template[] = [
         position: { x: 400, y: 300 },
       },
     ],
+    placeholderDescription: "Calendário mostrando sexta-feira com confetes de celebração",
   },
   {
     id: 24,
@@ -455,6 +496,56 @@ const templates: Template[] = [
     ],
   },
 ]
+
+// Template 3 (family-morning)
+templates.find((t) => t.id === 3)!.placeholderDescription = "Família feliz reunida no café da manhã com luz do sol"
+
+// Template 6 (mountain-dawn)
+templates.find((t) => t.id === 6)!.placeholderDescription = "Montanhas majestosas ao amanhecer com céu colorido"
+
+// Template 7 (prayer-morning)
+templates.find((t) => t.id === 7)!.placeholderDescription = "Mãos em oração com luz divina ao amanhecer"
+
+// Template 8 (monday-motivation)
+templates.find((t) => t.id === 8)!.placeholderDescription =
+  "Calendário mostrando segunda-feira com mensagem motivacional"
+
+// Template 10 (flower-blessing)
+templates.find((t) => t.id === 10)!.placeholderDescription = "Campo de flores coloridas ao nascer do sol"
+
+// Template 13 (garden-morning)
+templates.find((t) => t.id === 13)!.placeholderDescription = "Jardim florido iluminado pelos primeiros raios de sol"
+
+// Template 14 (sunflower-morning)
+templates.find((t) => t.id === 14)!.placeholderDescription = "Campo de girassóis voltados para o sol nascente"
+
+// Template 15 (bible-morning)
+templates.find((t) => t.id === 15)!.placeholderDescription = "Bíblia aberta com luz divina e versículo inspirador"
+
+// Template 16 (butterfly-morning)
+templates.find((t) => t.id === 16)!.placeholderDescription = "Borboleta colorida pousada em uma flor ao amanhecer"
+
+// Template 17 (rainbow-blessing)
+templates.find((t) => t.id === 17)!.placeholderDescription = "Arco-íris vibrante após chuva com céu clareando"
+
+// Template 18 (tea-meditation)
+templates.find((t) => t.id === 18)!.placeholderDescription = "Xícara de chá fumegante com ervas e ambiente tranquilo"
+
+// Template 19 (gratitude-morning)
+templates.find((t) => t.id === 19)!.placeholderDescription = "Mãos em gesto de gratidão com raios de sol"
+
+// Template 20 (window-morning)
+templates.find((t) => t.id === 20)!.placeholderDescription = "Janela aberta com cortinas balançando e sol entrando"
+
+// Template 21 (bread-breakfast)
+templates.find((t) => t.id === 21)!.placeholderDescription = "Mesa de café da manhã com pães, frutas e café"
+
+// Template 22 (cat-morning)
+templates.find((t) => t.id === 22)!.placeholderDescription = "Gatinho fofo se espreguiçando ao acordar"
+
+// Template 23 (friday-celebration)
+templates.find((t) => t.id === 23)!.placeholderDescription =
+  "Calendário mostrando sexta-feira com confetes de celebração"
 
 // Create the context
 const EditorContext = createContext<EditorContextType | undefined>(undefined)
@@ -495,7 +586,9 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
   const loadTemplateById = (id: string) => {
     const template = templates.find((t) => t.id === Number.parseInt(id))
     if (template) {
-      setBackgroundUrl(template.backgroundUrl)
+      // Verificar se a imagem de fundo existe ou usar um placeholder
+      const validBackgroundUrl = getValidImageUrl(template.backgroundUrl, template.placeholderDescription)
+      setBackgroundUrl(validBackgroundUrl)
       setTextElements(template.textElements)
       setSelectedTextId(template.textElements[0]?.id || null)
     }

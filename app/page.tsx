@@ -33,9 +33,9 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-12">
         <section className="flex flex-col items-center justify-center space-y-6 py-12 text-center md:py-24">
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
-        Crie imagens incríveis de   <strong style={{ color: "#eab308" }}>bom dia</strong> &nbsp;em segundos!
-        </h1>
+          <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl">
+          Crie imagens incríveis de   <strong style={{ color: "#eab308" }}>bom dia</strong> &nbsp;em segundos!
+          </h1>
           <p className="max-w-[700px] text-lg text-muted-foreground md:text-xl">
             Personalize, compartilhe e espalhe mensagens positivas para seus amigos e familiares no WhatsApp e outras
             redes sociais.
@@ -59,7 +59,11 @@ export default function Home() {
         </section>
 
         {/* Seção de anúncios */}
-        <AdSection />
+        <AdSection  
+            slot="9876543210"
+            title="Confira também estas opções!"
+            className="mt-12"
+          />
 
         <section className="mx-auto max-w-3xl py-12 text-center" id="como-funciona">
           <h2 className="mb-6 text-2xl font-bold">Como funciona?</h2>

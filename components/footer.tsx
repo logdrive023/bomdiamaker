@@ -11,9 +11,9 @@ export function Footer() {
             </p>
           </div>
           <nav className="flex gap-4 text-sm text-muted-foreground">
-            <Link href="/sobre" className="hover:underline">
+            {/*<Link href="/about" className="hover:underline">
               Sobre
-            </Link>
+            </Link>*/}
             <Link href="/ajuda" className="hover:underline">
               Ajuda
             </Link>

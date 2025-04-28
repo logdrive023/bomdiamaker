@@ -95,11 +95,11 @@ export default function PrivacyPolicyPage() {
             alterações publicando a nova Política de Privacidade nesta página.
           </p>
 
-          <h2 className="mt-6 text-xl font-semibold">Contato</h2>
+          {/*<h2 className="mt-6 text-xl font-semibold">Contato</h2>
           <p>
             Se você tiver dúvidas sobre esta Política de Privacidade, entre em contato conosco pelo e-mail:
             contato@bomdiaker.com.br
-          </p>
+          </p>*/}
 
           <p className="mt-6 text-sm text-gray-500">Última Atualização: 28 de Abril de 2025</p>
         </div>

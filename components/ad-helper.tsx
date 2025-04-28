@@ -1,36 +1,37 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
+import { useEffect } from "react";
+import { useRouter } from "next/navigation"; // importante
 
 export function AdHelper() {
+  const router = useRouter();
+
   useEffect(() => {
-    // Função para recarregar anúncios quando necessário
     const refreshAds = () => {
       try {
-        if (window.adsbygoogle && window.adsbygoogle.push) {
-          const adElements = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status="done"])')
+        if (typeof window !== "undefined" && (window as any).adsbygoogle?.push) {
+          const adElements = document.querySelectorAll('.adsbygoogle:not([data-adsbygoogle-status="done"])');
           adElements.forEach(() => {
-            window.adsbygoogle.push({})
-          })
+            (window as any).adsbygoogle.push({});
+          });
         }
       } catch (error) {
-        console.error("Erro ao carregar anúncios:", error)
+        console.error("Erro ao carregar anúncios:", error);
       }
-    }
+    };
 
-    // Tenta carregar anúncios quando o componente montar
-    refreshAds()
+    refreshAds();
 
-    // Adiciona um listener para recarregar anúncios quando a rota mudar
     const handleRouteChange = () => {
-      setTimeout(refreshAds, 300)
-    }
+      setTimeout(refreshAds, 300);
+    };
 
-    window.addEventListener("routeChangeComplete", handleRouteChange)
+    router.events?.on?.("routeChangeComplete", handleRouteChange);
+
     return () => {
-      window.removeEventListener("routeChangeComplete", handleRouteChange)
-    }
-  }, [])
+      router.events?.off?.("routeChangeComplete", handleRouteChange);
+    };
+  }, [router]);
 
-  return null
+  return null;
 }

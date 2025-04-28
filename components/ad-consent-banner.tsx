@@ -1,30 +1,36 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export function AdConsentBanner() {
-  const [showBanner, setShowBanner] = useState(false)
+  const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Verificar se o usuário já aceitou os cookies
-    const hasConsent = localStorage.getItem("adConsent")
+    if (typeof window === "undefined") return;
+
+    const hasConsent = localStorage.getItem("adConsent");
     if (!hasConsent) {
-      // Mostrar banner após um pequeno delay para não interromper o carregamento inicial
       const timer = setTimeout(() => {
-        setShowBanner(true)
-      }, 1500)
-      return () => clearTimeout(timer)
+        setShowBanner(true);
+      }, 1500);
+
+      return () => clearTimeout(timer);
     }
-  }, [])
+  }, []);
 
   const acceptConsent = () => {
-    localStorage.setItem("adConsent", "true")
-    setShowBanner(false)
-  }
+    localStorage.setItem("adConsent", "accepted");
+    setShowBanner(false);
+  };
 
-  if (!showBanner) return null
+  const rejectConsent = () => {
+    localStorage.setItem("adConsent", "rejected");
+    setShowBanner(false);
+  };
+
+  if (!showBanner) return null;
 
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 p-4">
@@ -33,20 +39,19 @@ export function AdConsentBanner() {
           <div>
             <h3 className="text-xl font-bold">Anúncios e Cookies</h3>
             <p className="mt-2 text-base">
-              Utilizamos cookies e exibimos anúncios para melhorar sua experiência. Ao continuar navegando, você
-              concorda com nossa política de privacidade.
+              Utilizamos cookies e exibimos anúncios para melhorar sua experiência. Ao continuar navegando, você concorda com nossa política de privacidade.
             </p>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row">
             <Button onClick={acceptConsent} className="bg-green-600 text-lg font-medium hover:bg-green-700" size="lg">
               Aceitar
             </Button>
-            <Button variant="outline" onClick={acceptConsent} className="text-lg font-medium" size="lg">
-              Recusar Anúncios
+            <Button onClick={rejectConsent} variant="outline" className="text-lg font-medium" size="lg">
+              Recusar
             </Button>
           </div>
         </div>
       </Card>
     </div>
-  )
+  );
 }

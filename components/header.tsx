@@ -14,9 +14,9 @@ export function Header() {
     { name: "Início", path: "/" },
     { name: "Editor", path: "/editor" },
     { name: "Templates", path: "/templates" },
-    { name: "Sobre", path: "/about" },
-    { name: "Ajuda", path: "/ajuda" },
+    { name: "Ajuda", path: "/ajuda" }
   ]
+  {/*{ name: "Sobre", path: "/about" },*/}
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)

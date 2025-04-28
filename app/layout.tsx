@@ -9,6 +9,8 @@ import { Providers } from "./providers"
 import { SiteConfig } from "@/config/site"
 import { AdConsentBanner } from "@/components/ad-consent-banner"
 import { AdHelper } from "@/components/ad-helper"
+import { GoogleAnalytics } from "@/components/GoogleAnalytics"; // Ajuste o caminho conforme onde você salvar
+
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -104,7 +106,7 @@ export default function RootLayout({
         />
 
         {/* Google Analytics */}
-        <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX`} />
+        <GoogleAnalytics trackingId="G-XXXXXXXXXX" />
         <Script
           id="google-analytics"
           strategy="afterInteractive"

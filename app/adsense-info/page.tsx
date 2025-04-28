@@ -27,11 +27,12 @@ export default function AdsenseInfoPage() {
           pode ajustar suas preferências de anúncios a qualquer momento nas configurações do Google.
         </p>
 
+        {/*
         <h2 className="mb-4 text-2xl font-semibold">Dúvidas ou problemas?</h2>
         <p className="mb-6 leading-relaxed text-muted-foreground text-lg">
           Se você tiver alguma dúvida sobre os anúncios exibidos ou encontrar algum anúncio inadequado, entre em contato
           conosco através da página "Sobre". Estamos sempre à disposição para ajudar.
-        </p>
+        </p> */}
 
         <div className="mt-8 text-center">
           <Link href="/">
