@@ -87,7 +87,7 @@ const backgrounds = [
   },
   {
     id: 15,
-    url: "/templates/bible-morning.png",
+    url: "/templates/bible-morning.jpg",
     alt: "Bíblia pela manhã",
   },
   {
