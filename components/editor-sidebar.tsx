@@ -361,7 +361,7 @@ export function EditorSidebar() {
               )}
             </Button>
 
-            <Button
+            {/*<Button
               onClick={shareOnWhatsApp}
               className="w-full bg-green-600 hover:bg-green-700 text-lg py-6"
               disabled={isGenerating}
@@ -378,7 +378,7 @@ export function EditorSidebar() {
                   Compartilhar no WhatsApp
                 </>
               )}
-            </Button>
+            </Button>*/}
 
             <Button
               variant="outline"

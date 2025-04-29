@@ -7,10 +7,8 @@ import { Footer } from "@/components/footer"
 import Script from "next/script"
 import { Providers } from "./providers"
 import { SiteConfig } from "@/config/site"
-import { AdConsentBanner } from "@/components/ad-consent-banner"
-import { AdHelper } from "@/components/ad-helper"
-import { GoogleAnalytics } from "@/components/GoogleAnalytics"; // Ajuste o caminho conforme onde você salvar
-
+import { ClientComponentsWrapper } from "@/components/client-components-wrapper"
+import { GoogleAnalytics } from "@/components/GoogleAnalytics"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -67,7 +65,6 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
   },
   manifest: `${SiteConfig.url}/site.webmanifest`,
-    generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -92,14 +89,14 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <AdConsentBanner />
-          <AdHelper />
+          {/* Usando o wrapper de componentes cliente */}
+          <ClientComponentsWrapper />
         </Providers>
 
-        {/* Google AdSense Script */}
+        {/* Scripts carregados após a interação do usuário */}
         <Script
           id="adsbygoogle-init"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
           crossOrigin="anonymous"
@@ -109,7 +106,7 @@ export default function RootLayout({
         <GoogleAnalytics trackingId="G-XXXXXXXXXX" />
         <Script
           id="google-analytics"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           dangerouslySetInnerHTML={{
             __html: `
               window.dataLayer = window.dataLayer || [];

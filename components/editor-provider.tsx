@@ -1,8 +1,9 @@
 "use client"
 
 import type React from "react"
-import { createContext, useContext, useState, useEffect } from "react"
+import { createContext, useContext, useState, useEffect, Suspense, useRef } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
+import { Loader2 } from "lucide-react"
 
 // Define the text element type
 type TextElement = {
@@ -133,7 +134,7 @@ const templates: Template[] = [
         fontSize: 42,
         fontColor: "#ffd43b",
         textAlign: "center",
-        position: { x: 400, y: 300 },
+        position: { x: 400, y: 400 },
       },
       {
         id: "template_3_text_2",
@@ -338,7 +339,7 @@ const templates: Template[] = [
   },
   {
     id: 15,
-    backgroundUrl: "/templates/bible-morning.jpeg",
+    backgroundUrl: "/templates/bible-morning.png",
     textElements: [
       {
         id: "template_15_text_1",
@@ -556,19 +557,47 @@ const defaultValues = {
   textElements: [createDefaultTextElement()],
 }
 
-export function EditorProvider({ children }: { children: React.ReactNode }) {
+// Componente de loading para o Suspense
+function EditorProviderLoading() {
+  return (
+    <div className="flex items-center justify-center min-h-[200px]">
+      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+    </div>
+  )
+}
+
+// Componente interno que usa useSearchParams
+function EditorProviderContent({
+  children,
+  setBackgroundUrl,
+  setTextElements,
+  setSelectedTextId,
+  loadEditorState,
+}: {
+  children: React.ReactNode
+  setBackgroundUrl: (url: string) => void
+  setTextElements: (elements: TextElement[]) => void
+  setSelectedTextId: (id: string | null) => void
+  loadEditorState: () => boolean
+}) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const templateId = searchParams.get("template")
   const returnToEdit = searchParams.get("returnToEdit") === "true"
 
-  // State for editor properties
-  const [backgroundUrl, setBackgroundUrl] = useState(defaultValues.backgroundUrl)
-  const [textElements, setTextElements] = useState<TextElement[]>(defaultValues.textElements)
-  const [selectedTextId, setSelectedTextId] = useState<string | null>(defaultValues.textElements[0]?.id || null)
+  // Usar uma ref para controlar se já carregamos o estado
+  const initialLoadDoneRef = useRef(false)
 
   // Load template or saved state on initial render
   useEffect(() => {
+    // Evitar carregamentos repetidos que causam loop infinito
+    if (initialLoadDoneRef.current) {
+      return
+    }
+
+    // Marcar que já fizemos o carregamento inicial
+    initialLoadDoneRef.current = true
+
     if (returnToEdit) {
       // Try to load saved state if returning to edit
       const loaded = loadEditorState()
@@ -580,7 +609,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       // If not returning to edit but template ID is provided, load the template
       loadTemplateById(templateId)
     }
-  }, [templateId, returnToEdit])
+  }, [templateId, returnToEdit, loadEditorState])
 
   // Function to load a template by ID
   const loadTemplateById = (id: string) => {
@@ -593,6 +622,15 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
       setSelectedTextId(template.textElements[0]?.id || null)
     }
   }
+
+  return <>{children}</>
+}
+
+export function EditorProvider({ children }: { children: React.ReactNode }) {
+  // State for editor properties
+  const [backgroundUrl, setBackgroundUrl] = useState(defaultValues.backgroundUrl)
+  const [textElements, setTextElements] = useState<TextElement[]>(defaultValues.textElements)
+  const [selectedTextId, setSelectedTextId] = useState<string | null>(defaultValues.textElements[0]?.id || null)
 
   // Function to save editor state to localStorage
   const saveEditorState = () => {
@@ -794,7 +832,7 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
 
           console.log("Image data stored successfully")
 
-          // Set a timeout to clean up this temporary storage after 5 minutes
+          // Set a timeout to clean up this temporary storage after 30 minutes
           setTimeout(
             () => {
               localStorage.removeItem(`temp_image_${tempFilename}`)
@@ -874,7 +912,16 @@ export function EditorProvider({ children }: { children: React.ReactNode }) {
         clearEditorState,
       }}
     >
-      {children}
+      <Suspense fallback={<EditorProviderLoading />}>
+        <EditorProviderContent
+          setBackgroundUrl={setBackgroundUrl}
+          setTextElements={setTextElements}
+          setSelectedTextId={setSelectedTextId}
+          loadEditorState={loadEditorState}
+        >
+          {children}
+        </EditorProviderContent>
+      </Suspense>
     </EditorContext.Provider>
   )
 }

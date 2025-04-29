@@ -1,15 +1,16 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Share2, Download, Edit3, Sun } from "lucide-react"
+import { Share2, Download, Edit3, Sun, Loader2 } from "lucide-react"
 import Link from "next/link"
 import { AdBanner } from "@/components/ad-banner"
 import { AdSection } from "@/components/ad-section"
 
-export default function SuccessPage() {
+// Componente que usa useSearchParams
+function SuccessContent() {
   const searchParams = useSearchParams()
   const imageParam = searchParams.get("image") || ""
   const [imageUrl, setImageUrl] = useState("")
@@ -111,12 +112,31 @@ export default function SuccessPage() {
     img.onload = () => {
       console.log("Image loaded successfully, dimensions:", img.width, "x", img.height)
 
-      const canvas = canvasRef.current
-      if (!canvas) {
-        console.error("Canvas não encontrado")
-        setImageError(true)
+      // Verificar se o componente ainda está montado
+      if (!canvasRef.current) {
+        console.log("Canvas não disponível no momento, tentando renderizar diretamente")
+
+        // Tentar renderizar a imagem diretamente como fallback
+        const container = document.getElementById("image-preview-container")
+        if (container) {
+          // Clear container
+          container.innerHTML = ""
+
+          // Create an img element instead of using canvas
+          const directImg = document.createElement("img")
+          directImg.src = imageUrl
+          directImg.style.maxWidth = "100%"
+          directImg.style.height = "auto"
+          directImg.style.borderRadius = "0.5rem"
+          directImg.alt = "Imagem de bom dia gerada"
+
+          container.appendChild(directImg)
+          setImageLoaded(true)
+        }
         return
       }
+
+      const canvas = canvasRef.current
 
       // Set canvas dimensions to match the image
       canvas.width = img.width
@@ -126,19 +146,58 @@ export default function SuccessPage() {
       // Get the 2D context
       const ctx = canvas.getContext("2d")
       if (!ctx) {
-        console.error("Contexto 2D não disponível")
+        console.log("Contexto 2D não disponível, tentando renderizar diretamente")
+
+        // Tentar renderizar a imagem diretamente como fallback
+        const container = document.getElementById("image-preview-container")
+        if (container) {
+          // Clear container
+          container.innerHTML = ""
+
+          // Create an img element instead of using canvas
+          const directImg = document.createElement("img")
+          directImg.src = imageUrl
+          directImg.style.maxWidth = "100%"
+          directImg.style.height = "auto"
+          directImg.style.borderRadius = "0.5rem"
+          directImg.alt = "Imagem de bom dia gerada"
+
+          container.appendChild(directImg)
+        }
         setImageError(true)
         return
       }
 
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      try {
+        // Clear canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-      // Draw image
-      ctx.drawImage(img, 0, 0)
-      console.log("Image drawn to canvas")
+        // Draw image
+        ctx.drawImage(img, 0, 0)
+        console.log("Image drawn to canvas")
 
-      setImageLoaded(true)
+        setImageLoaded(true)
+      } catch (error) {
+        console.log("Erro ao desenhar imagem no canvas:", error)
+
+        // Tentar renderizar a imagem diretamente como fallback
+        const container = document.getElementById("image-preview-container")
+        if (container) {
+          // Clear container
+          container.innerHTML = ""
+
+          // Create an img element instead of using canvas
+          const directImg = document.createElement("img")
+          directImg.src = imageUrl
+          directImg.style.maxWidth = "100%"
+          directImg.style.height = "auto"
+          directImg.style.borderRadius = "0.5rem"
+          directImg.alt = "Imagem de bom dia gerada"
+
+          container.appendChild(directImg)
+          setImageLoaded(true)
+        }
+      }
     }
 
     // Set the image source
@@ -185,14 +244,38 @@ export default function SuccessPage() {
   // Função para compartilhar a imagem
   const shareImage = async () => {
     try {
-      if (navigator.share && canvasRef.current) {
-        // Converter canvas para blob
-        const blob = await new Promise<Blob>((resolve) => {
-          canvasRef.current?.toBlob((blob) => {
-            if (blob) resolve(blob)
-            else throw new Error("Falha ao converter canvas para blob")
-          }, "image/png")
-        })
+      if (navigator.share) {
+        let blob
+
+        // Tentar obter a imagem do canvas
+        if (canvasRef.current) {
+          try {
+            // Converter canvas para blob
+            blob = await new Promise<Blob>((resolve, reject) => {
+              canvasRef.current?.toBlob((b) => {
+                if (b) resolve(b)
+                else reject(new Error("Falha ao converter canvas para blob"))
+              }, "image/png")
+            })
+          } catch (canvasError) {
+            console.log("Erro ao obter blob do canvas:", canvasError)
+
+            // Se falhar, tentar obter a imagem diretamente da URL
+            if (imageUrl.startsWith("data:")) {
+              // Converter data URL para blob
+              const response = await fetch(imageUrl)
+              blob = await response.blob()
+            } else {
+              throw new Error("Não foi possível obter a imagem para compartilhamento")
+            }
+          }
+        } else if (imageUrl.startsWith("data:")) {
+          // Se o canvas não estiver disponível, tentar obter a imagem diretamente da URL
+          const response = await fetch(imageUrl)
+          blob = await response.blob()
+        } else {
+          throw new Error("Não foi possível obter a imagem para compartilhamento")
+        }
 
         // Criar arquivo para compartilhamento
         const file = new File([blob], "bom-dia.png", { type: "image/png" })
@@ -215,7 +298,30 @@ export default function SuccessPage() {
 
   // Função para baixar a imagem
   const downloadImage = () => {
-    if (!canvasRef.current) return
+    if (!canvasRef.current) {
+      console.log("Canvas não disponível para download, tentando baixar a imagem diretamente")
+
+      // Criar link de download direto para a imagem
+      if (imageUrl) {
+        const link = document.createElement("a")
+        link.download = "bom-dia.png"
+
+        // Se for uma URL de dados, use-a diretamente
+        if (imageUrl.startsWith("data:")) {
+          link.href = imageUrl
+        } else {
+          // Se for uma URL externa, pode não funcionar devido a CORS
+          link.href = imageUrl
+        }
+
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      } else {
+        alert("Não foi possível baixar a imagem. Tente novamente mais tarde.")
+      }
+      return
+    }
 
     try {
       // Criar link de download
@@ -227,7 +333,22 @@ export default function SuccessPage() {
       document.body.removeChild(link)
     } catch (error) {
       console.error("Erro ao baixar imagem:", error)
-      alert("Não foi possível baixar a imagem. Tente novamente mais tarde.")
+
+      // Tentar baixar a imagem original como fallback
+      if (imageUrl) {
+        try {
+          const link = document.createElement("a")
+          link.download = "bom-dia.png"
+          link.href = imageUrl
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        } catch (fallbackError) {
+          alert("Não foi possível baixar a imagem. Tente novamente mais tarde.")
+        }
+      } else {
+        alert("Não foi possível baixar a imagem. Tente novamente mais tarde.")
+      }
     }
   }
 
@@ -321,5 +442,25 @@ export default function SuccessPage() {
         </Link>
       </div>
     </div>
+  )
+}
+
+// Componente de loading para o Suspense
+function SuccessLoading() {
+  return (
+    <div className="container mx-auto px-4 py-12 flex flex-col items-center justify-center">
+      <Loader2 className="h-12 w-12 animate-spin text-yellow-500 mb-4" />
+      <h2 className="text-xl font-medium">Carregando sua imagem...</h2>
+      <p className="text-muted-foreground mt-2">Aguarde um momento enquanto preparamos sua criação.</p>
+    </div>
+  )
+}
+
+// Componente principal que envolve o conteúdo com Suspense
+export default function SuccessPage() {
+  return (
+    <Suspense fallback={<SuccessLoading />}>
+      <SuccessContent />
+    </Suspense>
   )
 }
