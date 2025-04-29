@@ -75,6 +75,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <head>
+        <meta name="google-adsense-account" content="ca-pub-4488733165053759" />
         {/* Preconnect to Google domains for AdSense */}
         <link rel="preconnect" href="https://www.googletagservices.com" />
         <link rel="preconnect" href="https://googleads.g.doubleclick.net" />
@@ -98,7 +99,7 @@ export default function RootLayout({
           id="adsbygoogle-init"
           strategy="lazyOnload"
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4488733165053759"
           crossOrigin="anonymous"
         />
 
