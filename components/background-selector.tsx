@@ -377,16 +377,17 @@ export function BackgroundSelector() {
                     <strong className="text-blue-900">Sites que NÃO funcionam:</strong>
                   </div>
 
-                  <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-3">
+                  {/* Lista de sites com restrições - VERSÃO MELHORADA PARA RESPONSIVIDADE */}
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-1 gap-2 mb-3">
                     {restrictedSites.map((site, index) => (
-                      <li key={index} className="flex items-center gap-2 bg-white p-2 rounded border border-blue-100">
-                        <span className="text-xl" aria-hidden="true">
+                      <div key={index} className="flex items-center gap-2 bg-white p-2 rounded border border-blue-100">
+                        <span className="text-xl flex-shrink-0" aria-hidden="true">
                           {site.icon}
                         </span>
-                        <span className="font-medium">{site.name}</span>
-                      </li>
+                        <span className="font-medium text-sm sm:text-base truncate">{site.name}</span>
+                      </div>
                     ))}
-                  </ul>
+                  </div>
 
                   <div className="flex justify-center mt-4">
                     <Link

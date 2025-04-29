@@ -8,13 +8,13 @@ import { Alert } from "@/components/ui/alert"
 export default function AjudaPage() {
   return (
     <div className="container mx-auto max-w-3xl px-4 py-12">
-      <h1 className="mb-6 text-center text-3xl font-bold">Ajuda - Bom Dia Maker</h1>
+      <h1 className="mb-6 text-center text-3xl font-bold">Ajuda - Criador Bom Dia</h1>
 
       <div className="rounded-lg bg-slate-900 p-8 shadow-sm text-white">
         <h2 className="mb-6 text-2xl font-semibold text-white">Problemas com Carregamento de Imagens</h2>
 
         <p className="mb-6 leading-relaxed text-white">
-          Ao usar o Bom Dia Maker, você pode encontrar dificuldades ao tentar usar imagens de certos sites. Isso
+          Ao usar o Criador Bom Dia, você pode encontrar dificuldades ao tentar usar imagens de certos sites. Isso
           acontece devido a restrições de segurança chamadas CORS (Cross-Origin Resource Sharing) que muitos sites
           implementam para proteger suas imagens.
         </p>

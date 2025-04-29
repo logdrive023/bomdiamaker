@@ -10,7 +10,7 @@ export default function AdsenseInfoPage() {
       <div className="rounded-lg bg-slate-50 p-8 shadow-sm">
         <h2 className="mb-4 text-2xl font-semibold">Por que exibimos anúncios?</h2>
         <p className="mb-6 leading-relaxed text-muted-foreground text-lg">
-          O Bom Dia Maker é um serviço gratuito que oferecemos para ajudar você a criar e compartilhar mensagens
+          O Criador Bom Dia é um serviço gratuito que oferecemos para ajudar você a criar e compartilhar mensagens
           positivas com seus amigos e familiares. Para manter nosso site funcionando e continuar oferecendo este serviço
           sem cobrar dos usuários, exibimos anúncios do Google AdSense.
         </p>

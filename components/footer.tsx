@@ -7,7 +7,7 @@ export function Footer() {
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
           <div className="flex flex-col items-center gap-2 md:items-start">
             <p className="text-center text-sm text-muted-foreground md:text-left">
-              &copy; {new Date().getFullYear()} Bom Dia Maker. Todos os direitos reservados.
+              &copy; {new Date().getFullYear()} Criador Bom Dia. Todos os direitos reservados.
             </p>
           </div>
           <nav className="flex gap-4 text-sm text-muted-foreground">

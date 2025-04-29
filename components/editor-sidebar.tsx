@@ -61,7 +61,7 @@ export function EditorSidebar() {
     try {
       const imageUrl = await generateImage()
       const shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(
-        "Criei esta imagem com Bom Dia Maker! " +
+        "Criei esta imagem com Criador Bom Dia! " +
           window.location.origin +
           "/success?image=" +
           encodeURIComponent(imageUrl),

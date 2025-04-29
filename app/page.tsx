@@ -93,7 +93,7 @@ export default function Home() {
         </section>
 
         <section className="mx-auto max-w-3xl py-12 text-center" id="beneficios">
-          <h2 className="mb-6 text-2xl font-bold">Por que usar o Bom Dia Maker?</h2>
+          <h2 className="mb-6 text-2xl font-bold">Por que usar o Criador Bom Dia?</h2>
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-lg border bg-card p-6 text-card-foreground shadow-sm">
               <h3 className="mb-2 text-xl font-medium">Rápido e Fácil</h3>

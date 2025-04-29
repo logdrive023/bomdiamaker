@@ -27,7 +27,7 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2 text-xl font-bold">
           <Sun className="h-6 w-6 text-yellow-500" />
-          <span>Bom Dia Maker</span>
+          <span>Criador Bom Dia</span>
         </Link>
 
         {/* Mobile menu button */}

@@ -4,8 +4,8 @@ import { Card } from "@/components/ui/card"
 import { AdBanner } from "@/components/ad-banner"
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade | Bom Dia Maker",
-  description: "Política de privacidade e termos de uso do Bom Dia Maker",
+  title: "Política de Privacidade | Criador Bom Dia",
+  description: "Política de privacidade e termos de uso do Criador Bom Dia",
 }
 
 export default function PrivacyPolicyPage() {
@@ -17,13 +17,13 @@ export default function PrivacyPolicyPage() {
         <div className="prose prose-lg max-w-none dark:prose-invert">
           <h2 className="text-xl font-semibold">Introdução</h2>
           <p>
-            Bem-vindo à Política de Privacidade do Bom Dia Maker. Esta política explica como funciona nosso site em
+            Bem-vindo à Política de Privacidade do Criador Bom Dia. Esta política explica como funciona nosso site em
             relação à sua privacidade.
           </p>
 
           <h2 className="mt-6 text-xl font-semibold">Não Armazenamos Seus Dados</h2>
           <p>
-            <strong>Importante:</strong> O Bom Dia Maker <strong>não armazena</strong> nenhuma informação pessoal dos
+            <strong>Importante:</strong> O Criador Bom Dia <strong>não armazena</strong> nenhuma informação pessoal dos
             usuários. Nosso site funciona de forma temporária - você entra, cria sua imagem, e se atualizar a página
             (F5), tudo volta ao estado inicial.
           </p>
@@ -71,7 +71,7 @@ export default function PrivacyPolicyPage() {
 
           <h2 className="mt-6 text-xl font-semibold">Imagens Geradas</h2>
           <p>
-            As imagens que você cria no Bom Dia Maker são processadas apenas no seu navegador. Não armazenamos cópias
+            As imagens que você cria no Criador Bom Dia são processadas apenas no seu navegador. Não armazenamos cópias
             dessas imagens em nossos servidores. Quando você compartilha uma imagem, ela é enviada diretamente do seu
             dispositivo para o destinatário, sem passar por nossos servidores.
           </p>
